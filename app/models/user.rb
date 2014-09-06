@@ -9,4 +9,11 @@ class User
 
   has_many :resource_roles
   has_many :pages
+  has_one :calendar
+
+  before_create :create_calendar
+
+  def create_calendar
+    self.build_calendar.save
+  end
 end
