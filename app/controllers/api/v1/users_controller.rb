@@ -1,4 +1,20 @@
 class Api::V1::UsersController < Api::V1::BaseController
+  def index
+    user = User.find_by(token: params[:token])
+    if user.can(:read, "Users")
+      @users = User.all
+
+      render json: {
+        status: 0,
+        data: @users
+      }
+    else
+      render json: {
+        status: -100
+      }
+    end
+  end
+
   def show
     @pages = User.first.pages
     

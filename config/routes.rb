@@ -5,6 +5,8 @@ Rails.application.routes.draw do
         match 'privileges', to: 'privileges#create', via: [:options]
         match 'privileges/:id', to: 'privileges#update', via: [:options]
         resources :privileges
+
+        resources :roles
       end
 
       match 'pages', to: 'pages#create', via: [:options]
@@ -23,6 +25,8 @@ Rails.application.routes.draw do
 
       match 'sessions', to: 'sessions#create', via: [:options]
       resources :sessions
+
+      resources :permissions
     end
   end
   #root :to => "home#index"

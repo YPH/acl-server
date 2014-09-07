@@ -68,7 +68,8 @@ class Api::V1::PagesController < Api::V1::BaseController
       }
     rescue
       render json: {
-        status: -100
+        status: -100,
+        permission_code: 0
       }
     end
   end

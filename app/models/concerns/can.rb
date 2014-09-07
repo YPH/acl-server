@@ -7,12 +7,16 @@ module Can
       admin_role = Role.where(name: "admin").first
       return true if admin_role && !ResourceRole.where(user: self, role: admin_role).empty?
    
-      role = ResourceRole.where(user: self, resourceable: resource).first.try(:role)
+      if resource.class == String
+        role = ResourceRole.where(user: self, resourceable_type: resource).first.try(:role)
+      else
+        role = ResourceRole.where(user: self, resourceable: resource).first.try(:role)
+      end
       return false if !self || !role
 
       action_code = Privilege.where(
         role: role,
-        resource_name: resource.class.to_s
+        resource_name: resource.class == String ? resource : resource.class.to_s
       ).first.try(:action_code)
 
       return action_code >= Privilege.action_to_code(action) #action_code & Privilege.action_to_code(action) > 0
@@ -24,12 +28,16 @@ module Can
       admin_role = Role.where(name: "admin").first
       return 7 if admin_role && !ResourceRole.where(user: self, role: admin_role).empty?
 
-      role = ResourceRole.where(user: self, resourceable: resource).first.try(:role)
+      if resource.class == String
+        role = ResourceRole.where(user: self, resourceable_type: resource).first.try(:role)
+      else
+        role = ResourceRole.where(user: self, resourceable: resource).first.try(:role)
+      end
       return 0 if !self || !role
 
       privilege = Privilege.where(
         role: role,
-        resource_name: resource.class.to_s
+        resource_name: resource.class == String ? resource : resource.class.to_s
       ).first
 
       if privilege
